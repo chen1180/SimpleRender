@@ -85,11 +85,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Documents\Games101\assignments\Hw3\Assignment3\Code\Triangle.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GLwindow.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Documents\Games101\assignments\Hw3\Assignment3\Code\Triangle.hpp" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="OBJ_Loader.h" />
     <ClInclude Include="resource.h" />
     <QtMoc Include="GLwindow.h" />

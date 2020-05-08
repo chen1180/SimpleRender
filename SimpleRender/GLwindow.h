@@ -10,6 +10,7 @@
 #include<qopenglbuffer.h>
 #include"Triangle.hpp"
 #include<qopenglvertexarrayobject.h>
+#include<qevent.h>
 class GLwindow : public QOpenGLWindow
 {
 	Q_OBJECT
@@ -25,6 +26,10 @@ public:
     void resizeGL(int w, int h);
     void initializeGL();
     void paintGL();
+protected:
+    void mousePressEvent(QMouseEvent* event);
+    void mouseMoveEvent(QMouseEvent* event);
+    void wheelEvent(QWheelEvent* event);
 private:
     QOpenGLContext m_context;
     QOpenGLFramebufferObject* m_fbo;
@@ -42,6 +47,10 @@ private:
     GLuint textureUniform;
     std::vector<Triangle*> TriangleList;
     std::vector<GLfloat> data;
-    int m_iter;
+    double alpha=25;
+    double beta=-25;
+    double distance=2.5;
+    QPoint lastMousePosition;
+
 };
 #endif GLWINDOW_H

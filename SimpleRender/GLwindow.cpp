@@ -1,7 +1,6 @@
 #include "GLwindow.h"
 #include<gl/GL.h>
 #include<qopenglfunctions.h>
-
 #include"OBJ_Loader.h"
 void GLwindow::initializeGL() {
     f = context()->functions();
@@ -84,13 +83,19 @@ void GLwindow::initializeGL() {
 }
 void GLwindow::paintGL() {
 
-    f->glViewport(0, 0, 500, 500);
+    f->glViewport(0, 0, this->width(), this->height());
     f->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // issue some native OpenGL commands
     m_program->bind();
     QMatrix4x4 model;
     model.rotate(QQuaternion::fromAxisAndAngle(QVector3D(0, 1, 0), 180));
     QMatrix4x4 view;
+    QMatrix4x4 cameraTransformation;
+    cameraTransformation.rotate(alpha, 0, 1, 0);
+    cameraTransformation.rotate(beta, 1, 0, 0);
+    QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, distance);
+    QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
+    view.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
     QMatrix4x4 projection;
     projection.perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
     projection.translate(0, 0, -5);
@@ -109,6 +114,51 @@ void GLwindow::paintGL() {
 
     // animate continuously: schedule an update
     update();
+   
 }
 void GLwindow::resizeGL(int w, int h) {
 }
+void GLwindow::mousePressEvent(QMouseEvent* event)
+{
+    lastMousePosition = event->pos();
+    event->accept();
+}
+void GLwindow::mouseMoveEvent(QMouseEvent* event)
+{
+    int deltaX = event->x() - lastMousePosition.x();
+    int deltaY = event->y() - lastMousePosition.y();
+    if (event->buttons() & Qt::LeftButton) {
+        alpha -= deltaX;
+        while (alpha < 0) {
+            alpha += 360;
+        }
+            while (alpha >= 360) {
+                alpha -= 360;
+            }
+        beta -= deltaY;
+        if (beta < -90) {
+            beta = -90;
+        }
+        if (beta > 90) {
+            beta = 90;
+        }
+        update();
+    }
+    lastMousePosition = event->pos();
+    event->accept();
+}
+void GLwindow::wheelEvent(QWheelEvent* event)
+{
+    int delta = event->delta();
+    if (event->orientation() == Qt::Vertical) {
+        if (delta < 0) {
+            distance *= 1.1;
+        }
+        else if (delta > 0) {
+            distance *= 0.9;
+        }
+        update();
+    }
+    event->accept();
+}
+
