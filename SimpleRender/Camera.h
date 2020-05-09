@@ -1,5 +1,6 @@
 #pragma once
 #ifndef Camera_H
+#define Camera_H
 #include<qvector3d.h>
 #include<qmatrix4x4.h>
 class Camera

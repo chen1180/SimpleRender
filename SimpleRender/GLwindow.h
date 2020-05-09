@@ -2,15 +2,15 @@
 #ifndef GLWINDOW_H
 #define GLWINDOW_H
 
-
-
 #include <qopenglwindow.h>
+#include<gl/GL.h>
+#include<qopenglfunctions.h>
 #include<qopenglshaderprogram.h>
-#include<qopengltexture.h>
-#include<qopenglbuffer.h>
-#include"Triangle.hpp"
+#include<qopenglbuffer.h>`
 #include<qopenglvertexarrayobject.h>
 #include<qevent.h>
+#include"Texture.h"
+#include"MeshTriangle.h"
 class GLwindow : public QOpenGLWindow
 {
 	Q_OBJECT
@@ -35,7 +35,10 @@ private:
     QOpenGLFramebufferObject* m_fbo;
     QOpenGLFunctions* f;
     QOpenGLShaderProgram* m_program;
-    QOpenGLTexture* texture;
+
+    Texture* texture;
+    MeshTriangle mesh;
+
     QOpenGLVertexArrayObject vao;
     QOpenGLBuffer vbo;
     GLuint m_posAttr;
@@ -45,8 +48,7 @@ private:
     GLuint viewUniform;
     GLuint projectionUniform;
     GLuint textureUniform;
-    std::vector<Triangle*> TriangleList;
-    std::vector<GLfloat> data;
+
     double alpha=25;
     double beta=-25;
     double distance=2.5;

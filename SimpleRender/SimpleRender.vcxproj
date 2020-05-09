@@ -84,16 +84,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Documents\Games101\assignments\Hw3\Assignment3\Code\Triangle.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GLwindow.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MeshTriangle.cpp" />
+    <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Documents\Games101\assignments\Hw3\Assignment3\Code\Triangle.hpp" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Light.h" />
+    <ClInclude Include="MeshTriangle.h" />
     <ClInclude Include="OBJ_Loader.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Texture.h" />
     <QtMoc Include="GLwindow.h" />
   </ItemGroup>
   <ItemGroup>
