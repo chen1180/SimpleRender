@@ -3,7 +3,7 @@
 #include <vector>
 #include <memory>
 #include "Vector.hpp"
-#include "Object.h"
+#include"Object.h"
 #include "Light.h"
 
 class Scene
@@ -12,7 +12,7 @@ public:
     // setting up options
     int width = 1280;
     int height = 960;
-    double fov = 90;
+    double fov = 60;
     Vector3f backgroundColor = Vector3f(0.235294, 0.67451, 0.843137);
     int maxDepth = 5;
     float epsilon = 0.00001;
@@ -30,3 +30,4 @@ private:
     // creating the scene (adding objects and lights)
     std::vector<std::unique_ptr<Object> > objects;
     std::vector<std::unique_ptr<Light> > lights;
+}

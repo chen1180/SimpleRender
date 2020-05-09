@@ -28,3 +28,28 @@ void MeshTriangle::load(const QString& model_path) {
         std::cout << "Model path invalid!" << std::endl;
     }
 }
+void MeshTriangle::setupBuffer(QOpenGLShaderProgram* m_program) {
+    m_program->bind();
+    vao.create();
+    vao.bind();
+    //create buffer (Do not release until VAO is created)
+    vbo.create();
+    vbo.bind();
+    vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
+    vbo.allocate(data.data(), sizeof(data[0]) *data.size());
+    // Create Vertex Array Object
+
+    m_program->enableAttributeArray(0);
+    m_program->setAttributeBuffer(0, GL_FLOAT, sizeof(float) * 0, 3, sizeof(float) * 5);
+    m_program->enableAttributeArray(1);
+    m_program->setAttributeBuffer(1, GL_FLOAT, sizeof(float) * 3, 2, sizeof(float) * 5);
+    vao.release();
+    vbo.release();
+    m_program->release();
+}
+void MeshTriangle::render(QOpenGLShaderProgram* m_program) {
+    texture->bind();
+    vao.bind();
+    f->glDrawArrays(GL_TRIANGLES, 0, mesh.data.size());
+    vao.release();
+}
