@@ -12,6 +12,7 @@
 #include"Texture.h"
 #include"MeshTriangle.h"
 #include"Scene.h"
+#include<QtCore/qt>
 class GLwindow : public QOpenGLWindow
 {
 	Q_OBJECT
@@ -29,6 +30,7 @@ public:
 protected:
     void mousePressEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
+    void keyPressEvent(QKeyEvent* event);
     void wheelEvent(QWheelEvent* event);
 private:
     QOpenGLContext m_context;

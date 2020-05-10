@@ -3,8 +3,10 @@ void GLwindow::initializeGL() {
     f = context()->functions();
     f->initializeOpenGLFunctions();
 
+
     f->glEnable(GL_TEXTURE_2D);
     f->glEnable(GL_DEPTH_TEST);
+    
     m_program = new QOpenGLShaderProgram(this);
     m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, "phong.vert");
     m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, "phong.frag");
@@ -57,7 +59,7 @@ void GLwindow::initializeGL() {
     scene.Add(std::move(tallbox));*/
     scene.Add(std::move(mesh));
     //light
-    auto light1 = std::make_unique<Light>(QVector3D(0,2,0),100);
+    auto light1 = std::make_unique<Light>(QVector3D(0,5,0),100);
     light1->shape = light;
     scene.Add(std::move(light1));
 }
@@ -66,25 +68,17 @@ void GLwindow::paintGL() {
     f->glViewport(0, 0, this->width(), this->height());
     f->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // issue some native OpenGL commands
-
-  
-    QMatrix4x4 view;
-    QMatrix4x4 cameraTransformation;
-    cameraTransformation.rotate(alpha, 0, 1, 0);
-    cameraTransformation.rotate(beta, 1, 0, 0);
-    QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, distance);
-    QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
-    view.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
+    QMatrix4x4 view= scene.camera.GetViewMatrix();
 
     QMatrix4x4 projection;
-    projection.perspective(60.0f, 4.0f / 3.0f, 0.1f, 1000.0f);
-    projection.translate(0, 0, 1);
+    projection.perspective(scene.camera.Zoom, 4.0f / 3.0f, 0.1f, 1000.0f);
     m_program->bind();
 
     m_program->setUniformValue("view", view);
     m_program->setUniformValue("projection", projection);
 
-    m_program->setUniformValue("cameraPos", cameraPosition);
+    m_program->setUniformValue("cameraPos", scene.camera.Position);
+    std::cout << scene.camera.Position[0] <<" "<< scene.camera.Position[1] << " " << scene.camera.Position[2] << std::endl;
   
     m_program->setUniformValue("lightColor", QVector3D(1.0, 1.0, 1.0));
     m_program->setUniformValue("ambientColor", QVector3D(1.0, 0.5, 0.31));
@@ -142,20 +136,7 @@ void GLwindow::mouseMoveEvent(QMouseEvent* event)
     int deltaX = event->x() - lastMousePosition.x();
     int deltaY = event->y() - lastMousePosition.y();
     if (event->buttons() & Qt::LeftButton) {
-        alpha -= deltaX;
-        while (alpha < 0) {
-            alpha += 360;
-        }
-            while (alpha >= 360) {
-                alpha -= 360;
-            }
-        beta -= deltaY;
-        if (beta < -90) {
-            beta = -90;
-        }
-        if (beta > 90) {
-            beta = 90;
-        }
+        scene.camera.ProcessMouseMovement(deltaX, deltaY,true);
         update();
     }
     lastMousePosition = event->pos();
@@ -165,14 +146,28 @@ void GLwindow::wheelEvent(QWheelEvent* event)
 {
     int delta = event->delta();
     if (event->orientation() == Qt::Vertical) {
-        if (delta < 0) {
-            distance *= 1.1;
-        }
-        else if (delta > 0) {
-            distance *= 0.9;
-        }
+        scene.camera.ProcessMouseScroll(delta);
         update();
     }
     event->accept();
 }
+void GLwindow::keyPressEvent(QKeyEvent* event) {
+    switch (event->key())
+    {
+    case Qt::Key_A:
+        scene.camera.ProcessKeyboard(LEFT, 0.1);
+        break;
+    case Qt::Key_S:
+        scene.camera.ProcessKeyboard(BACKWARD, 0.1);
+        break;
+    case Qt::Key_D:
+        scene.camera.ProcessKeyboard(RIGHT, 0.1);
+        break;
+    case Qt::Key_W:
+        scene.camera.ProcessKeyboard(FORWARD, 0.1);
+        break;
+    default:
+        break;
+    }
 
+}

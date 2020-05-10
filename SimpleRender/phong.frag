@@ -20,10 +20,13 @@ vec3 CalcPointLight(vec3 lightPos,vec3 Normal,vec3 fragPos,vec3 cameraPos){
     vec3 norm=normalize(Normal);
     float r=length(lightPos-fragPos);
 
-    ambient=lightColor;
+    ambient=lightColor*0.1;
+
     diffuse=max(dot(norm,lightDir),0.0)*lightColor;
+
     vec3 bisector=normalize(viewDir+lightDir);
-    specular=pow(max(dot(reflect(lightDir,norm),viewDir),0.0),32)*lightColor;
+    specular=pow(max(dot(reflect(-lightDir,norm),viewDir),0.0),32)*lightColor;
+
     return (diffuse+specular+ambient)*diffuseColor;
 
 }

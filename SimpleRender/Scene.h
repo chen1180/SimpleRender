@@ -5,7 +5,7 @@
 #include "Vector.hpp"
 #include"Object.h"
 #include "Light.h"
-
+#include"Camera.h"
 class Scene
 {
 public:
@@ -17,6 +17,15 @@ public:
     Vector3f backgroundColor = Vector3f(0.235294, 0.67451, 0.843137);
     int maxDepth = 5;
     float epsilon = 0.00001;
+
+    float lastX = width / 2.0f;
+    float lastY = height / 2.0f;
+    bool firstMouse = true;
+
+    // timing
+    float deltaTime = 0.0f;	// time between current frame and last frame
+    float lastFrame = 0.0f;
+    Camera camera=Camera(QVector3D(0.0, 0.0, 1.0));
 
     Scene(int w, int h) : width(w), height(h){}
 
