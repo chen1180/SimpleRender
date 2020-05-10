@@ -1,51 +1,73 @@
 #include "GLwindow.h"
-
 void GLwindow::initializeGL() {
     f = context()->functions();
     f->initializeOpenGLFunctions();
-   
+
     f->glEnable(GL_TEXTURE_2D);
     f->glEnable(GL_DEPTH_TEST);
     m_program = new QOpenGLShaderProgram(this);
-
-    m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, "flat.vert");
-    m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, "flat.frag");
+    m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, "phong.vert");
+    m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, "phong.frag");
     m_program->link();
-    m_posAttr = m_program->attributeLocation("aPos");
-    m_colAttr = m_program->attributeLocation("aColor");
-    m_textAttr = m_program->attributeLocation("aTexCoord");
-    projectionUniform = m_program->uniformLocation("projection");
-    viewUniform = m_program->uniformLocation("view");
-    modelUniform = m_program->uniformLocation("model");
-    textureUniform = m_program->uniformLocation("text");
-    //load model to triangles
-    texture=new Texture("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/spot/spot_texture.png");
-    mesh.load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/spot/spot_triangulated_good.obj");
-    vao.create();
-    vao.bind();
-    //create buffer (Do not release until VAO is created)
-    vbo.create();
-    vbo.bind();
-    vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
-    vbo.allocate(mesh.data.data(), sizeof(mesh.data[0])* mesh.data.size());
-    // Create Vertex Array Object
 
-    m_program->enableAttributeArray(0);
-    m_program->setAttributeBuffer(0, GL_FLOAT, sizeof(float) * 0, 3,sizeof(float)*5);
-    m_program->enableAttributeArray(1);
-    m_program->setAttributeBuffer(1, GL_FLOAT, sizeof(float) * 3, 2, sizeof(float) * 5);
-    vao.release();
-    vbo.release();
-    m_program->release();
+    light_program = new QOpenGLShaderProgram(this);
+    light_program->addShaderFromSourceFile(QOpenGLShader::Vertex, "flat.vert");
+    light_program->addShaderFromSourceFile(QOpenGLShader::Fragment, "flat.frag");
+    light_program->link();
+
+    auto mesh = std::make_unique<MeshTriangle>(QVector3D(0,0,0));
+    mesh->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/spot/spot_triangulated_good.obj");
+    mesh->addTexture("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/spot/spot_texture.png");
+    mesh->setupBuffer(m_program);
+    mesh->diffuse = QVector3D(0.6, 0.6, 0.6);
+ /*   auto floor = std::make_unique<MeshTriangle>();
+    floor->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/cornellbox/floor.obj");
+    floor->setupBuffer(m_program);
+    floor->diffuse = QVector3D(0.6, 0.6, 0.6);
+
+    auto left = std::make_unique<MeshTriangle>();
+    left->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/cornellbox/left.obj");
+    left->setupBuffer(m_program);
+    left->diffuse = QVector3D(0.6, 0.1, 0.1);
+
+    auto right = std::make_unique<MeshTriangle>();
+    right->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/cornellbox/right.obj");
+    right->setupBuffer(m_program);
+    right->diffuse = QVector3D(0.1, 0.6, 0.1);
+
+    auto shortbox = std::make_unique<MeshTriangle>();
+    shortbox->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/cornellbox/shortbox.obj");
+    shortbox->setupBuffer(m_program);
+    shortbox->diffuse = QVector3D(0.6, 0.6, 0.6);
+
+    auto tallbox = std::make_unique<MeshTriangle>();
+    tallbox->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/cornellbox/tallbox.obj");
+    tallbox->setupBuffer(m_program);
+    tallbox->diffuse = QVector3D(0.6, 0.6, 0.6);*/
+
+    auto *light = new MeshTriangle();
+    light->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/box.obj");
+    light->setupBuffer(m_program);
+    light->diffuse = QVector3D(0.6, 0.6, 0.6);
+
+   /* scene.Add(std::move(floor));
+    scene.Add(std::move(left));
+    scene.Add(std::move(right));
+    scene.Add(std::move(shortbox));
+    scene.Add(std::move(tallbox));*/
+    scene.Add(std::move(mesh));
+    //light
+    auto light1 = std::make_unique<Light>(QVector3D(0,2,0),100);
+    light1->shape = light;
+    scene.Add(std::move(light1));
 }
 void GLwindow::paintGL() {
 
     f->glViewport(0, 0, this->width(), this->height());
     f->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // issue some native OpenGL commands
-    m_program->bind();
-    QMatrix4x4 model;
-    model.rotate(QQuaternion::fromAxisAndAngle(QVector3D(0, 1, 0), 180));
+
+  
     QMatrix4x4 view;
     QMatrix4x4 cameraTransformation;
     cameraTransformation.rotate(alpha, 0, 1, 0);
@@ -53,20 +75,57 @@ void GLwindow::paintGL() {
     QVector3D cameraPosition = cameraTransformation * QVector3D(0, 0, distance);
     QVector3D cameraUpDirection = cameraTransformation * QVector3D(0, 1, 0);
     view.lookAt(cameraPosition, QVector3D(0, 0, 0), cameraUpDirection);
+
     QMatrix4x4 projection;
-    projection.perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
-    projection.translate(0, 0, -5);
-    m_program->setUniformValue(modelUniform, model);
-    m_program->setUniformValue(viewUniform, view);
-    m_program->setUniformValue(projectionUniform, projection);
-    texture->bind();
-    vao.bind();
-    f->glDrawArrays(GL_TRIANGLES, 0, mesh.data.size());
-    vao.release();
-    texture->release();
+    projection.perspective(60.0f, 4.0f / 3.0f, 0.1f, 1000.0f);
+    projection.translate(0, 0, 1);
+    m_program->bind();
 
+    m_program->setUniformValue("view", view);
+    m_program->setUniformValue("projection", projection);
+
+    m_program->setUniformValue("cameraPos", cameraPosition);
+  
+    m_program->setUniformValue("lightColor", QVector3D(1.0, 1.0, 1.0));
+    m_program->setUniformValue("ambientColor", QVector3D(1.0, 0.5, 0.31));
+
+    m_program->setUniformValue("specularColor", QVector3D(0.5, 0.5, 0.5));
+    for (auto& b : scene.get_objects()) {
+        int i = 0;
+        for (auto& light : scene.get_lights())
+        {
+            Light& l = *light;
+            QString tStr = QString("lightPos[%1]").arg(i);
+            m_program->setUniformValue(tStr.toStdString().c_str(), l.position);
+            i++;
+        }
+        MeshTriangle& x = dynamic_cast<MeshTriangle&>(*b);
+        QMatrix4x4 model;
+        model.rotate(QQuaternion::fromAxisAndAngle(QVector3D(0, 1, 0), 180));
+        model.translate(x.modelPosition);
+        m_program->setUniformValue("model", model);
+        m_program->setUniformValue("diffuseColor", x.diffuse);
+        //x.texture->bind();
+        x.vao.bind();
+        f->glDrawArrays(GL_TRIANGLES, 0, x.data.size());
+        //x.texture->release();
+
+    }
     m_program->release();
+    light_program->bind();
+    for (auto& light : scene.get_lights())
+    {
+        Light& l = *light;
+        light_program->setUniformValue("view", view);
+        light_program->setUniformValue("projection", projection);
+        QMatrix4x4 model;
+        model.translate(l.position);
+        light_program->setUniformValue("model", model);
+        l.shape->vao.bind();
+        f->glDrawArrays(GL_TRIANGLES, 0, l.shape->data.size());
 
+    }
+    light_program->release();
     // animate continuously: schedule an update
     update();
    

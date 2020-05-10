@@ -8,6 +8,7 @@ class Texture
 {
 public:
     Texture(const QString& filePath);
+    Texture() {}
     void bind();
     void release();
     ~Texture();

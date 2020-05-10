@@ -1,6 +1,6 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(467,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (SimpleRender.vcxproj).  This can lead to incorrect clean and rebuild behavior.
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(467,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (SimpleRender.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   GLwindow.cpp
-  MeshTriangle.cpp
-C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\GLwindow.h(9,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline (compiling source file GLwindow.cpp)
+C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\GLwindow.h(9,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\MeshTriangle.h(6,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
   SimpleRender.vcxproj -> C:\Users\dirk_\source\repos\SimpleRender\x64\Debug\SimpleRenderer.exe

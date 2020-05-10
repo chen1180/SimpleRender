@@ -47,6 +47,12 @@
     <ClCompile Include="MeshTriangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -67,6 +73,12 @@
     <ClInclude Include="MeshTriangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="GLwindow.h">
@@ -81,6 +93,12 @@
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="flat.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="phong.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="phong.frag">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

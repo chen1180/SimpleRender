@@ -11,6 +11,7 @@
 #include<qevent.h>
 #include"Texture.h"
 #include"MeshTriangle.h"
+#include"Scene.h"
 class GLwindow : public QOpenGLWindow
 {
 	Q_OBJECT
@@ -21,7 +22,6 @@ public:
         format.setDepthBufferSize(24);
         format.setStencilBufferSize(8);
         setFormat(format);
-
     }
     void resizeGL(int w, int h);
     void initializeGL();
@@ -35,20 +35,8 @@ private:
     QOpenGLFramebufferObject* m_fbo;
     QOpenGLFunctions* f;
     QOpenGLShaderProgram* m_program;
-
-    Texture* texture;
-    MeshTriangle mesh;
-
-    QOpenGLVertexArrayObject vao;
-    QOpenGLBuffer vbo;
-    GLuint m_posAttr;
-    GLuint m_colAttr;
-    GLuint m_textAttr;
-    GLuint modelUniform;
-    GLuint viewUniform;
-    GLuint projectionUniform;
-    GLuint textureUniform;
-
+    QOpenGLShaderProgram* light_program;
+    Scene scene;
     double alpha=25;
     double beta=-25;
     double distance=2.5;

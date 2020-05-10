@@ -17,6 +17,9 @@ void MeshTriangle::load(const QString& model_path) {
                     data.push_back(mesh.Vertices[i + j].Position.X);
                     data.push_back(mesh.Vertices[i + j].Position.Y);
                     data.push_back(mesh.Vertices[i + j].Position.Z);
+                    data.push_back(mesh.Vertices[i + j].Normal.X);
+                    data.push_back(mesh.Vertices[i + j].Normal.Y);
+                    data.push_back(mesh.Vertices[i + j].Normal.Z);
                     data.push_back(mesh.Vertices[i + j].TextureCoordinate.X);
                     data.push_back(mesh.Vertices[i + j].TextureCoordinate.Y);
                 }
@@ -40,16 +43,16 @@ void MeshTriangle::setupBuffer(QOpenGLShaderProgram* m_program) {
     // Create Vertex Array Object
 
     m_program->enableAttributeArray(0);
-    m_program->setAttributeBuffer(0, GL_FLOAT, sizeof(float) * 0, 3, sizeof(float) * 5);
+    m_program->setAttributeBuffer(0, GL_FLOAT, sizeof(float) * 0, 3, sizeof(float) * 8);
     m_program->enableAttributeArray(1);
-    m_program->setAttributeBuffer(1, GL_FLOAT, sizeof(float) * 3, 2, sizeof(float) * 5);
+    m_program->setAttributeBuffer(1, GL_FLOAT, sizeof(float) * 3, 3, sizeof(float) * 8);
+    m_program->enableAttributeArray(2);
+    m_program->setAttributeBuffer(2, GL_FLOAT, sizeof(float) * 6, 2, sizeof(float) * 8);
     vao.release();
     vbo.release();
     m_program->release();
 }
-void MeshTriangle::render(QOpenGLShaderProgram* m_program) {
+void MeshTriangle::addTexture(const QString& path) {
+    texture = new Texture(path);
     texture->bind();
-    vao.bind();
-    f->glDrawArrays(GL_TRIANGLES, 0, mesh.data.size());
-    vao.release();
 }

@@ -11,6 +11,8 @@ class Object
 public:
     Object() {}
     virtual ~Object() {}
-    virtual void render();
     Material* m;
+    QVector3D diffuse;
+    QVector3D modelPosition;
+
 };

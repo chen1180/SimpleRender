@@ -1,5 +1,7 @@
 #pragma once
 #include<qvector3d.h>
+#include"MeshTriangle.h"
+#include<qstring.h>
 class Light
 {
 public:
@@ -7,9 +9,12 @@ public:
         : position(p)
         , intensity(i)
     {}
+
     virtual ~Light() = default;
+
     QVector3D position;
     float intensity;
+    MeshTriangle* shape;
 };
 
 
