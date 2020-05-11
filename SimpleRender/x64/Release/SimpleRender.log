@@ -1,0 +1,22 @@
+﻿  Reading Qt configuration (C:\Qt\5.14.2\msvc2017_64\bin\qmake.exe)
+  moc GLwindow.h
+  Arcball.cpp
+  Camera.cpp
+  GLwindow.cpp
+  Light.cpp
+  main.cpp
+  MeshTriangle.cpp
+  Object.cpp
+  Scene.cpp
+  Texture.cpp
+C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\MeshTriangle.h(6,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline (compiling source file MeshTriangle.cpp)
+C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\MeshTriangle.h(6,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline (compiling source file Light.cpp)
+C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\MeshTriangle.h(6,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline (compiling source file Scene.cpp)
+C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\GLwindow.h(9,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline (compiling source file GLwindow.cpp)
+C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\GLwindow.h(9,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline (compiling source file main.cpp)
+C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\MeshTriangle.h(6,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline (compiling source file GLwindow.cpp)
+C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\MeshTriangle.h(6,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline (compiling source file main.cpp)
+  moc_GLwindow.cpp
+C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\GLwindow.h(9,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\MeshTriangle.h(6,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  SimpleRender.vcxproj -> C:\Users\dirk_\source\repos\SimpleRender\x64\Release\SimpleRenderer.exe

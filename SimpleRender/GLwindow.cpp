@@ -65,33 +65,33 @@ void GLwindow::initializeGL() {
 }
 void GLwindow::paintGL() {
 
-    f->glViewport(0, 0, this->width(), this->height());
+    f->glViewport(0, 0, scene.width,scene.height);
     f->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     // issue some native OpenGL commands
-    QMatrix4x4 view= scene.camera.GetViewMatrix();
+    QMatrix4x4 view=scene.arcball.transform();
 
     QMatrix4x4 projection;
-    projection.perspective(scene.camera.Zoom, 4.0f / 3.0f, 0.1f, 1000.0f);
+    projection.perspective(60.0f, (float)scene.width/scene.height, 0.1f, 1000.0f);
     m_program->bind();
 
     m_program->setUniformValue("view", view);
     m_program->setUniformValue("projection", projection);
 
-    m_program->setUniformValue("cameraPos", scene.camera.Position);
-    std::cout << scene.camera.Position[0] <<" "<< scene.camera.Position[1] << " " << scene.camera.Position[2] << std::endl;
+    m_program->setUniformValue("cameraPos", scene.arcball.eye());
   
     m_program->setUniformValue("lightColor", QVector3D(1.0, 1.0, 1.0));
     m_program->setUniformValue("ambientColor", QVector3D(1.0, 0.5, 0.31));
 
     m_program->setUniformValue("specularColor", QVector3D(0.5, 0.5, 0.5));
     for (auto& b : scene.get_objects()) {
-        int i = 0;
+        //int i = 0;
         for (auto& light : scene.get_lights())
         {
             Light& l = *light;
-            QString tStr = QString("lightPos[%1]").arg(i);
-            m_program->setUniformValue(tStr.toStdString().c_str(), l.position);
-            i++;
+            //QString tStr = QString("lightPos[%1]").arg(i);
+            //m_program->setUniformValue(tStr.toStdString().c_str(), l.position);
+            m_program->setUniformValue("lightPos", l.position);
+            //i++;
         }
         MeshTriangle& x = dynamic_cast<MeshTriangle&>(*b);
         QMatrix4x4 model;
@@ -133,21 +133,25 @@ void GLwindow::mousePressEvent(QMouseEvent* event)
 }
 void GLwindow::mouseMoveEvent(QMouseEvent* event)
 {
-    int deltaX = event->x() - lastMousePosition.x();
-    int deltaY = event->y() - lastMousePosition.y();
+    QVector2D cur_mouse = QVector2D(event->x() * 2.0 / scene.width - 1.0, 1.0 - event->y() * 2.0 / scene.height);
     if (event->buttons() & Qt::LeftButton) {
-        scene.camera.ProcessMouseMovement(deltaX, deltaY,true);
-        update();
+        scene.arcball.rotate(scene.prev_mouse,cur_mouse);
     }
-    lastMousePosition = event->pos();
+    if (event->buttons() & Qt::RightButton) {
+        scene.arcball.pan(cur_mouse-scene.prev_mouse);
+    }
+
+    update();
+    scene.prev_mouse = cur_mouse;
     event->accept();
 }
 void GLwindow::wheelEvent(QWheelEvent* event)
 {
     int delta = event->delta();
     if (event->orientation() == Qt::Vertical) {
-        scene.camera.ProcessMouseScroll(delta);
-        update();
+        //scene.camera.ProcessMouseScroll(delta);
+        scene.arcball.zoom(delta*0.01);
+
     }
     event->accept();
 }

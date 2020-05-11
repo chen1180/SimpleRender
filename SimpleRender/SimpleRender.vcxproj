@@ -84,6 +84,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Arcball.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="GLwindow.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -94,6 +95,7 @@
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Arcball.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MeshTriangle.h" />
