@@ -17,11 +17,28 @@ void GLwindow::initializeGL() {
     light_program->addShaderFromSourceFile(QOpenGLShader::Fragment, "flat.frag");
     light_program->link();
 
+    Material emerald;
+    emerald.Ka = QVector3D(0.0215	,0.1745	,0.0215);
+    emerald.Kd = QVector3D(0.07568,	0.61424	,0.07568);
+    emerald.Ks = QVector3D(0.633	,0.727811,	0.633);
+    emerald.Ns = 0.6 * 128;
+
+    Material red_plastic;
+    red_plastic.Ka = QVector3D(0.0, 0.0, 0.0);
+    red_plastic.Kd = QVector3D(0.5, 0.0, 0.0);
+    red_plastic.Ks = QVector3D(0.7	,0.6,	0.6);
+    red_plastic.Ns = 0.25* 128;
+
     auto mesh = std::make_unique<MeshTriangle>(QVector3D(0,0,0));
     mesh->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/spot/spot_triangulated_good.obj");
-    mesh->addTexture("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/spot/spot_texture.png");
+    //mesh->addTexture("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/spot/spot_texture.png");
+    mesh->material = red_plastic;
     mesh->setupBuffer(m_program);
-    mesh->diffuse = QVector3D(0.6, 0.6, 0.6);
+
+    auto shortbox = std::make_unique<MeshTriangle>(QVector3D(2, 2, 0));
+    shortbox->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/box.obj");
+    shortbox->material = emerald;
+    shortbox->setupBuffer(m_program);
  /*   auto floor = std::make_unique<MeshTriangle>();
     floor->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/cornellbox/floor.obj");
     floor->setupBuffer(m_program);
@@ -50,18 +67,28 @@ void GLwindow::initializeGL() {
     auto *light = new MeshTriangle();
     light->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/box.obj");
     light->setupBuffer(m_program);
-    light->diffuse = QVector3D(0.6, 0.6, 0.6);
 
    /* scene.Add(std::move(floor));
     scene.Add(std::move(left));
     scene.Add(std::move(right));
     scene.Add(std::move(shortbox));
     scene.Add(std::move(tallbox));*/
+    scene.Add(std::move(shortbox));
     scene.Add(std::move(mesh));
     //light
-    auto light1 = std::make_unique<Light>(QVector3D(0,5,0),100);
+    auto light1 = std::make_unique<Light>(QVector3D(0,1,0),100);
     light1->shape = light;
+    light1->ambient = QVector3D(0.2, 0.2, 0.2);
+    light1->diffuse = QVector3D(0.8, 0.8, 0.8);
+    light1->specular = QVector3D(1.0, 1.0, 1.0);
     scene.Add(std::move(light1));
+
+    auto light2 = std::make_unique<Light>(QVector3D(3, -3, 5), 100);
+    light2->shape = light;
+    light2->ambient = QVector3D(0.2, 0.2, 0.2);
+    light2->diffuse = QVector3D(0.8, 0.8, 0.8);
+    light2->specular = QVector3D(1.0, 1.0, 1.0);
+    scene.Add(std::move(light2));
 }
 void GLwindow::paintGL() {
 
@@ -71,39 +98,42 @@ void GLwindow::paintGL() {
     QMatrix4x4 view=scene.arcball.transform();
 
     QMatrix4x4 projection;
-    projection.perspective(60.0f, (float)scene.width/scene.height, 0.1f, 1000.0f);
+    projection.perspective(60.0f, (float)scene.width/scene.height, 0.1f, 100.0f);
     m_program->bind();
 
     m_program->setUniformValue("view", view);
     m_program->setUniformValue("projection", projection);
 
-    m_program->setUniformValue("cameraPos", scene.arcball.eye());
+    m_program->setUniformValue("viewPos", scene.arcball.eye());
   
-    m_program->setUniformValue("lightColor", QVector3D(1.0, 1.0, 1.0));
-    m_program->setUniformValue("ambientColor", QVector3D(1.0, 0.5, 0.31));
+    m_program->setUniformValue("lightColor", QVector3D(.5, 0.5, 0.5));
 
-    m_program->setUniformValue("specularColor", QVector3D(0.5, 0.5, 0.5));
     for (auto& b : scene.get_objects()) {
-        //int i = 0;
+        int i = 0;
         for (auto& light : scene.get_lights())
         {
             Light& l = *light;
-            //QString tStr = QString("lightPos[%1]").arg(i);
-            //m_program->setUniformValue(tStr.toStdString().c_str(), l.position);
-            m_program->setUniformValue("lightPos", l.position);
-            //i++;
+            m_program->setUniformValue(QString("light[%1].position").arg(i).toStdString().c_str(), l.position);
+            m_program->setUniformValue(QString("light[%1].ambient").arg(i).toStdString().c_str(), l.ambient);
+            m_program->setUniformValue(QString("light[%1].diffuse").arg(i).toStdString().c_str(), l.diffuse);
+            m_program->setUniformValue(QString("light[%1].specular").arg(i).toStdString().c_str(), l.specular);
+            i++;
         }
+
         MeshTriangle& x = dynamic_cast<MeshTriangle&>(*b);
         QMatrix4x4 model;
         model.rotate(QQuaternion::fromAxisAndAngle(QVector3D(0, 1, 0), 180));
-        model.translate(x.modelPosition);
+        model.translate(x.position);
         m_program->setUniformValue("model", model);
-        m_program->setUniformValue("diffuseColor", x.diffuse);
+        m_program->setUniformValue("material.ka", x.material.Ka);
+        m_program->setUniformValue("material.ks", x.material.Ks);
+        m_program->setUniformValue("material.kd", x.material.Kd);
+        m_program->setUniformValue("material.shiniess", x.material.Ns);
         //x.texture->bind();
         x.vao.bind();
         f->glDrawArrays(GL_TRIANGLES, 0, x.data.size());
         //x.texture->release();
-
+      
     }
     m_program->release();
     light_program->bind();
@@ -114,6 +144,8 @@ void GLwindow::paintGL() {
         light_program->setUniformValue("projection", projection);
         QMatrix4x4 model;
         model.translate(l.position);
+        model.scale(QVector3D(0.1, 0.1, 0.1));
+
         light_program->setUniformValue("model", model);
         l.shape->vao.bind();
         f->glDrawArrays(GL_TRIANGLES, 0, l.shape->data.size());
@@ -156,22 +188,5 @@ void GLwindow::wheelEvent(QWheelEvent* event)
     event->accept();
 }
 void GLwindow::keyPressEvent(QKeyEvent* event) {
-    switch (event->key())
-    {
-    case Qt::Key_A:
-        scene.camera.ProcessKeyboard(LEFT, 0.1);
-        break;
-    case Qt::Key_S:
-        scene.camera.ProcessKeyboard(BACKWARD, 0.1);
-        break;
-    case Qt::Key_D:
-        scene.camera.ProcessKeyboard(RIGHT, 0.1);
-        break;
-    case Qt::Key_W:
-        scene.camera.ProcessKeyboard(FORWARD, 0.1);
-        break;
-    default:
-        break;
-    }
 
 }

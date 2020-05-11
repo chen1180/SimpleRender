@@ -8,6 +8,7 @@ void MeshTriangle::load(const QString& model_path) {
 
     if (loadout == true) {
         std::cout << "Model successfully loaded!" << std::endl;
+
         for (auto mesh : Loader.LoadedMeshes)
         {
             for (int i = 0;i < mesh.Vertices.size();i += 3)
@@ -25,6 +26,16 @@ void MeshTriangle::load(const QString& model_path) {
                 }
             }
         }
+        if (!Loader.LoadedMaterials.empty()) {
+            //only pad the first material
+            for (auto m : Loader.LoadedMaterials) {
+                material.Ka = QVector3D(m.Ka.X, m.Ka.Y, m.Ka.Z);
+                material.Kd = QVector3D(m.Kd.X, m.Kd.Y, m.Kd.Z);
+                material.Ks = QVector3D(m.Ks.X, m.Ks.Y, m.Ks.Z);
+
+            }
+        }
+           
 
     }
     else {

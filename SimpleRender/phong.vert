@@ -13,6 +13,6 @@ void main()
     gl_Position =projection * view * model*vec4(aPos, 1.0); // see how we directly give a vec3 to vec4's constructor
     fragPos= vec3(model*vec4(aPos, 1.0));
     TexCoord=aTexCoord;
-    Normal=Normal;
+    Normal=mat3(transpose(inverse(model))) * aNormal; 
 
 }

@@ -8,11 +8,12 @@
 #include<qopenglvertexarrayobject.h>
 #include"Object.h"
 #include"Texture.h"
+
 class MeshTriangle:public Object
 {
 public:
     MeshTriangle(const QVector3D& pos){
-        modelPosition = pos;
+        position = pos;
     }
     MeshTriangle() {
     }

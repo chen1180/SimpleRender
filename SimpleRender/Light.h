@@ -13,6 +13,9 @@ public:
     virtual ~Light() = default;
 
     QVector3D position;
+    QVector3D ambient;
+    QVector3D diffuse;
+    QVector3D specular;
     float intensity;
     MeshTriangle* shape;
 };
