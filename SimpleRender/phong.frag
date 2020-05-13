@@ -30,9 +30,9 @@ vec3 CalcPointLight(Light light,vec3 Normal,vec3 fragPos,vec3 cameraPos){
     float r=length(light.position-fragPos);
 
     ambient=light.ambient*material.ka;
-    diffuse=max(dot(norm,lightDir),0.0)*light.diffuse/r/r*material.kd;
+    diffuse=max(dot(norm,lightDir),0.0)*light.diffuse*material.kd;
     vec3 bisector=normalize(viewDir+lightDir);
-    specular=pow(max(dot(reflect(bisector,norm),viewDir),0.0),material.shiniess)*light.specular/r/r*material.ks;
+    specular=pow(max(dot(reflect(bisector,norm),viewDir),0.0),material.shiniess)*light.specular*material.ks;
     return (diffuse+specular+ambient);
 
 }

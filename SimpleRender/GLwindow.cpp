@@ -3,7 +3,6 @@ void GLwindow::initializeGL() {
     f = context()->functions();
     f->initializeOpenGLFunctions();
 
-
     f->glEnable(GL_TEXTURE_2D);
     f->glEnable(GL_DEPTH_TEST);
     
@@ -29,16 +28,21 @@ void GLwindow::initializeGL() {
     red_plastic.Ks = QVector3D(0.7	,0.6,	0.6);
     red_plastic.Ns = 0.25* 128;
 
-    auto mesh = std::make_unique<MeshTriangle>(QVector3D(0,0,0));
-    mesh->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/spot/spot_triangulated_good.obj");
+    //auto mesh = std::make_unique<MeshTriangle>(QVector3D(0,2,0));
+    //mesh->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/spot/spot_triangulated_good.obj");
     //mesh->addTexture("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/spot/spot_texture.png");
-    mesh->material = red_plastic;
-    mesh->setupBuffer(m_program);
+    //mesh->material = red_plastic;
+    //mesh->setupBuffer(m_program);
 
-    auto shortbox = std::make_unique<MeshTriangle>(QVector3D(2, 2, 0));
-    shortbox->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/box.obj");
-    shortbox->material = emerald;
-    shortbox->setupBuffer(m_program);
+    //auto plane = std::make_unique<MeshTriangle>(QVector3D(0, 0, 0));
+    //plane->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/plane.obj");
+    ////shortbox->material = emerald;
+    //plane->setupBuffer(m_program);
+
+    auto cornell = std::make_unique<MeshTriangle>(QVector3D(0, 0, 0));
+    cornell->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/cornellbox/cornellbox.obj");
+    //shortbox->material = emerald;
+    cornell->setupBuffer(m_program);
  /*   auto floor = std::make_unique<MeshTriangle>();
     floor->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/cornellbox/floor.obj");
     floor->setupBuffer(m_program);
@@ -68,15 +72,12 @@ void GLwindow::initializeGL() {
     light->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/box.obj");
     light->setupBuffer(m_program);
 
-   /* scene.Add(std::move(floor));
-    scene.Add(std::move(left));
-    scene.Add(std::move(right));
-    scene.Add(std::move(shortbox));
-    scene.Add(std::move(tallbox));*/
-    scene.Add(std::move(shortbox));
-    scene.Add(std::move(mesh));
+    //scene.Add(std::move(shortbox));
+    //scene.Add(std::move(mesh));
+    //scene.Add(std::move(plane));
+    scene.Add(std::move(cornell));
     //light
-    auto light1 = std::make_unique<Light>(QVector3D(0,1,0),100);
+    auto light1 = std::make_unique<Light>(QVector3D(0,3,0),100);
     light1->shape = light;
     light1->ambient = QVector3D(0.2, 0.2, 0.2);
     light1->diffuse = QVector3D(0.8, 0.8, 0.8);
@@ -105,8 +106,6 @@ void GLwindow::paintGL() {
     m_program->setUniformValue("projection", projection);
 
     m_program->setUniformValue("viewPos", scene.arcball.eye());
-  
-    m_program->setUniformValue("lightColor", QVector3D(.5, 0.5, 0.5));
 
     for (auto& b : scene.get_objects()) {
         int i = 0;
@@ -130,10 +129,10 @@ void GLwindow::paintGL() {
         m_program->setUniformValue("material.kd", x.material.Kd);
         m_program->setUniformValue("material.shiniess", x.material.Ns);
         //x.texture->bind();
-        x.vao.bind();
-        f->glDrawArrays(GL_TRIANGLES, 0, x.data.size());
+        /*x.vao.bind();
+        f->glDrawArrays(GL_TRIANGLES, 0, x.meshes.vertices.size());*/
         //x.texture->release();
-      
+        x.render(f,m_program);
     }
     m_program->release();
     light_program->bind();
@@ -147,8 +146,7 @@ void GLwindow::paintGL() {
         model.scale(QVector3D(0.1, 0.1, 0.1));
 
         light_program->setUniformValue("model", model);
-        l.shape->vao.bind();
-        f->glDrawArrays(GL_TRIANGLES, 0, l.shape->data.size());
+        l.shape->render(f,m_program);
 
     }
     light_program->release();

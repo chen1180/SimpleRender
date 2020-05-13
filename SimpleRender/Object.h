@@ -1,5 +1,6 @@
 #pragma once
 #include<qvector3d.h>
+#include<vector>
 struct Material
 {
     Material()
@@ -9,6 +10,10 @@ struct Material
         Ni = 0.0f;
         d = 0.0f;
         illum = 0;
+        Ka = QVector3D(0.2, 0.2, 0.2);
+        Kd = QVector3D(0.8, 0.8, 0.8);
+        Ks = QVector3D(1.0, 1.0, 1.0);
+        Ns = 0.25 * 128;
     }
 
     // Material Name
@@ -40,6 +45,7 @@ struct Material
     // Bump Map
     std::string map_bump;
 };
+
 class Object
 {
 public:
