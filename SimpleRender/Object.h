@@ -1,6 +1,7 @@
 #pragma once
 #include<qvector3d.h>
 #include<vector>
+#include<qopenglshaderprogram.h>
 struct Material
 {
     Material()
@@ -61,4 +62,5 @@ public:
     QVector3D translation;
     QVector3D rotation;
     QVector3D scale = QVector3D(1.0, 1.0, 1.0);
+    QOpenGLShaderProgram* shader_program;
 };

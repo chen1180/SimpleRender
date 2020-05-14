@@ -105,8 +105,9 @@ void MeshTriangle::load(const QString& model_path) {
     }
 }
 void MeshTriangle::setupBuffer(QOpenGLShaderProgram* m_program) {
+    shader_program = m_program;
     m_program->bind();
-    foreach(const auto & matName, materials.keys())
+   /* foreach(const auto & matName, materials.keys())
     {
         auto material = materials.value(matName);
         if (!material.map_Ka.isEmpty())
@@ -137,8 +138,7 @@ void MeshTriangle::setupBuffer(QOpenGLShaderProgram* m_program) {
                 materials.insert(matName, material);
             }
         }
-    }
-
+    }*/
     for (auto& mesh : meshes) {
 
         mesh.VAO->create();
@@ -161,40 +161,47 @@ void MeshTriangle::setupBuffer(QOpenGLShaderProgram* m_program) {
     m_program->release();
 }
 
-void MeshTriangle::render(QOpenGLFunctions* f, QOpenGLShaderProgram* m_program) {
+void MeshTriangle::render(QOpenGLFunctions* f) {
     for (auto& mesh : meshes) {
         if (materials.contains(mesh.matName)) {
             Material tmp_material= materials.value(mesh.matName);
             //bind ambient texture
+            shader_program->setUniformValue("have_texture_ka", tmp_material.have_map_Ka);
+            shader_program->setUniformValue("have_texture_kd", tmp_material.have_map_Kd);
+            shader_program->setUniformValue("have_texture_ks", tmp_material.have_map_Ks);
             if (tmp_material.have_map_Ka==true) {
-                m_program->setUniformValue("materialTexture.ka", ambientMaps.value(mesh.matName)->id);
+                f->glActiveTexture(GL_TEXTURE0 + ambientMaps.value(mesh.matName)->id);
+                shader_program->setUniformValue("materialTexture.ka", ambientMaps.value(mesh.matName)->id);
                 ambientMaps.value(mesh.matName)->bind();
             }
             else {
-                m_program->setUniformValue("material.ka", tmp_material.Ka);
+                shader_program->setUniformValue("material.ka", tmp_material.Ka);
             }
             //bind diffuse texture
             if (tmp_material.have_map_Kd == true) {
-                m_program->setUniformValue("materialTexture.kd", diffuseMaps.value(mesh.matName)->id);
+                f->glActiveTexture(GL_TEXTURE0+ diffuseMaps.value(mesh.matName)->id);
+                shader_program->setUniformValue("materialTexture.kd", diffuseMaps.value(mesh.matName)->id);
                 diffuseMaps.value(mesh.matName)->bind();
             }
             else {
-                m_program->setUniformValue("material.kd", tmp_material.Kd);
+                shader_program->setUniformValue("material.kd", tmp_material.Kd);
             }
             //bind specular texture
             if (tmp_material.have_map_Ks == true) {
-                m_program->setUniformValue("materialTexture.ks", specularMaps.value(mesh.matName)->id);
+                f->glActiveTexture(GL_TEXTURE0+ specularMaps.value(mesh.matName)->id);
+                shader_program->setUniformValue("materialTexture.ks", specularMaps.value(mesh.matName)->id);
                 specularMaps.value(mesh.matName)->bind();
             }
             else {
-                m_program->setUniformValue("material.ks", tmp_material.Ks);
+                shader_program->setUniformValue("material.ks", tmp_material.Ks);
             }
-            m_program->setUniformValue("material.shiniess", tmp_material.Ns);
+            shader_program->setUniformValue("material.shiniess", tmp_material.Ns);
         }
 
         mesh.VAO->bind();
         f->glDrawArrays(GL_TRIANGLES, 0, mesh.vertices.size());
         mesh.VAO->release();
+        f->glActiveTexture(GL_TEXTURE0 );
         if (materials.contains(mesh.matName)) {
             Material tmp_material = materials.value(mesh.matName);
             //bind ambient texture

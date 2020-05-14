@@ -53,7 +53,7 @@ public:
 	}
 	void load(const QString& model_path);
 	void setupBuffer(QOpenGLShaderProgram* m_program);
-	void render(QOpenGLFunctions* f, QOpenGLShaderProgram* m_program);
+	void render(QOpenGLFunctions* f);
 	std::vector<Texture> textures;
 	QMap<std::string, Texture*> diffuseMaps;
 	QMap<std::string, Texture*> ambientMaps;
