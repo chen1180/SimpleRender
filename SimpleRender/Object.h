@@ -14,6 +14,9 @@ struct Material
         Kd = QVector3D(0.8, 0.8, 0.8);
         Ks = QVector3D(1.0, 1.0, 1.0);
         Ns = 0.25 * 128;
+        have_map_Ka=false;
+        have_map_Kd = false;
+        have_map_Ks = false;
     }
 
     // Material Name
@@ -33,17 +36,20 @@ struct Material
     // Illumination
     int illum;
     // Ambient Texture Map
-    std::string map_Ka;
+    QString map_Ka;
     // Diffuse Texture Map
-    std::string map_Kd;
+    QString map_Kd;
     // Specular Texture Map
-    std::string map_Ks;
+    QString map_Ks;
     // Specular Hightlight Map
-    std::string map_Ns;
+    QString map_Ns;
     // Alpha Texture Map
-    std::string map_d;
+    QString map_d;
     // Bump Map
-    std::string map_bump;
+    QString map_bump;
+    bool have_map_Ka;
+    bool have_map_Kd;
+    bool have_map_Ks;
 };
 
 class Object
@@ -51,7 +57,8 @@ class Object
 public:
     Object() {}
     virtual ~Object() {}
-    Material material={ };
-    QVector3D position;
-
+    Material material = { };
+    QVector3D translation;
+    QVector3D rotation;
+    QVector3D scale = QVector3D(1.0, 1.0, 1.0);
 };

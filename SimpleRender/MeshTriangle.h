@@ -9,6 +9,9 @@
 #include"Object.h"
 #include"Texture.h"
 #include<qopenglfunctions.h>
+#include<qfileinfo.h>
+#include<qdir.h>
+#include<qmap.h>
 struct Vertex {
 	// position
 	QVector3D Position;
@@ -25,23 +28,23 @@ struct  Mesh
 		VAO = new QOpenGLVertexArrayObject();
 		VBO = new QOpenGLBuffer();
 	}
-	//Mesh(const Mesh&) = delete;
-	//Mesh& operator=(const Mesh&) = delete;
-	//Mesh(Mesh&&) = default;
-	//Mesh& operator=(Mesh&&) = default;
-	// mesh Data
 	std::vector<Vertex>       vertices;
 	std::vector<unsigned int> indices;
-	std::vector<Texture>      textures;
-	Material material;
+
+	//Material material;
 	QOpenGLVertexArrayObject* VAO;
 	QOpenGLBuffer* VBO;
+	//Texture* diffuseMap;
+	//Texture* ambientMap;
+	//Texture* specularMap;
+	std::string matName;
 };
 class MeshTriangle :public Object
 {
 public:
 	MeshTriangle(const QVector3D& pos) {
-		position = pos;
+		translation = pos;
+
 	}
 	MeshTriangle() {
 	}
@@ -50,11 +53,13 @@ public:
 	}
 	void load(const QString& model_path);
 	void setupBuffer(QOpenGLShaderProgram* m_program);
-	void addTexture(const QString& path);
 	void render(QOpenGLFunctions* f, QOpenGLShaderProgram* m_program);
-	std::vector<float> data;
+	std::vector<Texture> textures;
+	QMap<std::string, Texture*> diffuseMaps;
+	QMap<std::string, Texture*> ambientMaps;
+	QMap<std::string, Texture*> specularMaps;
+	QMap<std::string, Material> materials;
 	std::vector<Mesh> meshes;
-	Texture* texture;
 };
 #endif MESHTRIANGLE_H
 

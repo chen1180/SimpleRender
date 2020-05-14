@@ -10,6 +10,11 @@ struct Material{
         vec3 ks;
         float shiniess;
 };
+struct Texture{
+        sampler2D ka;
+        sampler2D kd;
+        sampler2D ks;
+};
 struct Light{
         vec3 ambient;
         vec3 diffuse;
@@ -19,6 +24,11 @@ struct Light{
 uniform vec3 viewPos;
 uniform Light light[MAX_LIGHT];
 uniform Material material;
+uniform Texture materialTexture;
+
+uniform bool have_texture_ka=false;
+uniform bool have_texture_kd=false;
+uniform bool have_texture_ks=false;
 
 out vec4 fragColor;
 
@@ -28,11 +38,22 @@ vec3 CalcPointLight(Light light,vec3 Normal,vec3 fragPos,vec3 cameraPos){
     vec3 viewDir=normalize(cameraPos-fragPos);
     vec3 norm=normalize(Normal);
     float r=length(light.position-fragPos);
-
-    ambient=light.ambient*material.ka;
-    diffuse=max(dot(norm,lightDir),0.0)*light.diffuse*material.kd;
+    //Ambient
+    if (have_texture_ka==true)
+        ambient=light.ambient*texture2D(materialTexture.ka,TexCoord).rgb;
+    else
+        ambient=light.ambient*material.ka;
+     //Diffuse
+     if (have_texture_kd==true)
+        diffuse=max(dot(norm,lightDir),0.0)*light.diffuse*texture2D(materialTexture.kd,TexCoord).rgb;
+     else
+        diffuse=max(dot(norm,lightDir),0.0)*light.diffuse*material.kd;
     vec3 bisector=normalize(viewDir+lightDir);
-    specular=pow(max(dot(reflect(bisector,norm),viewDir),0.0),material.shiniess)*light.specular*material.ks;
+        //Specular
+    if (have_texture_ks==true)
+        specular=pow(max(dot(reflect(bisector,norm),viewDir),0.0),material.shiniess)*light.specular*texture2D(materialTexture.ks,TexCoord).rgb;
+    else
+        specular=pow(max(dot(reflect(bisector,norm),viewDir),0.0),material.shiniess)*light.specular*material.ks;
     return (diffuse+specular+ambient);
 
 }

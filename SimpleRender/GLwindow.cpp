@@ -5,6 +5,7 @@ void GLwindow::initializeGL() {
 
     f->glEnable(GL_TEXTURE_2D);
     f->glEnable(GL_DEPTH_TEST);
+    //f->glEnable(GL_CULL_FACE);
     
     m_program = new QOpenGLShaderProgram(this);
     m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, "phong.vert");
@@ -15,18 +16,6 @@ void GLwindow::initializeGL() {
     light_program->addShaderFromSourceFile(QOpenGLShader::Vertex, "flat.vert");
     light_program->addShaderFromSourceFile(QOpenGLShader::Fragment, "flat.frag");
     light_program->link();
-
-    Material emerald;
-    emerald.Ka = QVector3D(0.0215	,0.1745	,0.0215);
-    emerald.Kd = QVector3D(0.07568,	0.61424	,0.07568);
-    emerald.Ks = QVector3D(0.633	,0.727811,	0.633);
-    emerald.Ns = 0.6 * 128;
-
-    Material red_plastic;
-    red_plastic.Ka = QVector3D(0.0, 0.0, 0.0);
-    red_plastic.Kd = QVector3D(0.5, 0.0, 0.0);
-    red_plastic.Ks = QVector3D(0.7	,0.6,	0.6);
-    red_plastic.Ns = 0.25* 128;
 
     //auto mesh = std::make_unique<MeshTriangle>(QVector3D(0,2,0));
     //mesh->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/spot/spot_triangulated_good.obj");
@@ -41,32 +30,11 @@ void GLwindow::initializeGL() {
 
     auto cornell = std::make_unique<MeshTriangle>(QVector3D(0, 0, 0));
     cornell->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/cornellbox/cornellbox.obj");
-    //shortbox->material = emerald;
     cornell->setupBuffer(m_program);
- /*   auto floor = std::make_unique<MeshTriangle>();
-    floor->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/cornellbox/floor.obj");
-    floor->setupBuffer(m_program);
-    floor->diffuse = QVector3D(0.6, 0.6, 0.6);
-
-    auto left = std::make_unique<MeshTriangle>();
-    left->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/cornellbox/left.obj");
-    left->setupBuffer(m_program);
-    left->diffuse = QVector3D(0.6, 0.1, 0.1);
-
-    auto right = std::make_unique<MeshTriangle>();
-    right->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/cornellbox/right.obj");
-    right->setupBuffer(m_program);
-    right->diffuse = QVector3D(0.1, 0.6, 0.1);
-
-    auto shortbox = std::make_unique<MeshTriangle>();
-    shortbox->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/cornellbox/shortbox.obj");
-    shortbox->setupBuffer(m_program);
-    shortbox->diffuse = QVector3D(0.6, 0.6, 0.6);
-
-    auto tallbox = std::make_unique<MeshTriangle>();
-    tallbox->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/cornellbox/tallbox.obj");
-    tallbox->setupBuffer(m_program);
-    tallbox->diffuse = QVector3D(0.6, 0.6, 0.6);*/
+    auto sponza = std::make_unique<MeshTriangle>(QVector3D(0, 0, 0));
+    sponza.get()->scale = QVector3D(0.1, 0.1, 0.1);
+    sponza->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/backpack/backpack.obj");
+    sponza->setupBuffer(m_program);
 
     auto *light = new MeshTriangle();
     light->load("C:/Users/dirk_/Documents/Games101/assignments/Hw3/Assignment3/Code/models/box.obj");
@@ -76,6 +44,7 @@ void GLwindow::initializeGL() {
     //scene.Add(std::move(mesh));
     //scene.Add(std::move(plane));
     scene.Add(std::move(cornell));
+    scene.Add(std::move(sponza));
     //light
     auto light1 = std::make_unique<Light>(QVector3D(0,3,0),100);
     light1->shape = light;
@@ -99,12 +68,11 @@ void GLwindow::paintGL() {
     QMatrix4x4 view=scene.arcball.transform();
 
     QMatrix4x4 projection;
-    projection.perspective(60.0f, (float)scene.width/scene.height, 0.1f, 100.0f);
+    projection.perspective(60.0f, (float)scene.width/scene.height, 0.1f, 1000.0f);
     m_program->bind();
 
     m_program->setUniformValue("view", view);
     m_program->setUniformValue("projection", projection);
-
     m_program->setUniformValue("viewPos", scene.arcball.eye());
 
     for (auto& b : scene.get_objects()) {
@@ -121,8 +89,9 @@ void GLwindow::paintGL() {
 
         MeshTriangle& x = dynamic_cast<MeshTriangle&>(*b);
         QMatrix4x4 model;
-        model.rotate(QQuaternion::fromAxisAndAngle(QVector3D(0, 1, 0), 180));
-        model.translate(x.position);
+        model.scale(x.scale);
+        //model.rotate(QQuaternion::fromAxisAndAngle(QVector3D(0, 1, 0), 180));
+        model.translate(x.translation);
         m_program->setUniformValue("model", model);
         m_program->setUniformValue("material.ka", x.material.Ka);
         m_program->setUniformValue("material.ks", x.material.Ks);
