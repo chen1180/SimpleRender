@@ -136,10 +136,10 @@ void GLwindow::paintGL() {
     projection.perspective(scene.fov, (float)scene.width / scene.height, 0.1f, 1000.0f);
     QMatrix4x4 invViewProj = (projection * view).inverted();
     QVector3D ray00, ray01, ray10, ray11;
-    ray00 = (QVector4D(-1, -1, 0, 1) * invViewProj).toVector3DAffine()-scene.arcball.eye();
-    ray01 = (QVector4D(-1, 1, 0, 1) * invViewProj).toVector3DAffine() - scene.arcball.eye();
-    ray10 = (QVector4D(1, -1, 0, 1) * invViewProj).toVector3DAffine() - scene.arcball.eye();
-    ray11 = (QVector4D(1, 1, 0, 1) * invViewProj).toVector3DAffine() - scene.arcball.eye();
+    ray00 = (invViewProj*QVector4D(-1, -1, 0, 1) ).toVector3DAffine()-scene.arcball.eye();
+    ray01 = (invViewProj * QVector4D(-1, 1, 0, 1) ).toVector3DAffine() - scene.arcball.eye();
+    ray10 = (invViewProj * QVector4D(1, -1, 0, 1) ).toVector3DAffine() - scene.arcball.eye();
+    ray11 = (invViewProj * QVector4D(1, 1, 0, 1) ).toVector3DAffine() - scene.arcball.eye();
     //m_fbo->bind();
     rt_program->bind();
     rt_program->setUniformValue("eye", scene.arcball.eye());
