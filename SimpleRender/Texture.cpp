@@ -20,7 +20,7 @@ bool Texture::load(const QString& filePath) {
     texture->bind();
     return true;
 }
-bool Texture::load(const QString& filePath, QOpenGLFunctions* f) {
+bool Texture::load(const QString& filePath, QOpenGLFunctions_4_3_Core* f) {
     //create texture
     f->glGenTextures(1, &id);
 
@@ -49,6 +49,7 @@ bool Texture::load(const QString& filePath, QOpenGLFunctions* f) {
     f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
     f->glBindTexture(GL_TEXTURE_2D, 0);
+    isLoaded = true;
 }
 void Texture::bind() {
     texture->bind();

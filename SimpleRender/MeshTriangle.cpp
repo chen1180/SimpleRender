@@ -161,7 +161,7 @@ void MeshTriangle::setupBuffer(QOpenGLShaderProgram* m_program) {
     m_program->release();
 }
 
-void MeshTriangle::render(QOpenGLFunctions* f) {
+void MeshTriangle::render(QOpenGLFunctions_4_3_Core* f) {
     for (auto& mesh : meshes) {
         if (materials.contains(mesh.matName)) {
             Material tmp_material= materials.value(mesh.matName);

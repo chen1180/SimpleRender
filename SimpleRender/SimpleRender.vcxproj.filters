@@ -92,9 +92,6 @@
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="SimpleRenderer.rc" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="flat.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
@@ -105,6 +102,15 @@
       <Filter>Resource Files\shaders</Filter>
     </None>
     <None Include="phong.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="raytracing.comp">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="quad.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="quad.vert">
       <Filter>Resource Files\shaders</Filter>
     </None>
   </ItemGroup>

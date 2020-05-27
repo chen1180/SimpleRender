@@ -13,8 +13,7 @@ struct Material{
 struct Texture{
         sampler2D ka;
         sampler2D kd;
-        sampler2D ks;
-};
+        sampler2D ks;};
 struct Light{
         vec3 ambient;
         vec3 diffuse;

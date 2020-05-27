@@ -9,6 +9,7 @@
 #include"Object.h"
 #include"Texture.h"
 #include<qopenglfunctions.h>
+#include<qopenglfunctions_4_3_core.h>
 #include<qfileinfo.h>
 #include<qdir.h>
 #include<qmap.h>
@@ -53,7 +54,7 @@ public:
 	}
 	void load(const QString& model_path);
 	void setupBuffer(QOpenGLShaderProgram* m_program);
-	void render(QOpenGLFunctions* f);
+	void render(QOpenGLFunctions_4_3_Core* f);
 	std::vector<Texture> textures;
 	QMap<std::string, Texture*> diffuseMaps;
 	QMap<std::string, Texture*> ambientMaps;

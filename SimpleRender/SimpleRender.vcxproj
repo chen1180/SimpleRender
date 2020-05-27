@@ -107,13 +107,13 @@
     <QtMoc Include="GLwindow.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="SimpleRenderer.rc" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="flat.frag" />
     <None Include="flat.vert" />
     <None Include="phong.frag" />
     <None Include="phong.vert" />
+    <None Include="quad.frag" />
+    <None Include="quad.vert" />
+    <None Include="raytracing.comp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

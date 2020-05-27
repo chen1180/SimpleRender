@@ -5,7 +5,6 @@
 #include "Vector.hpp"
 #include"Object.h"
 #include "Light.h"
-#include"Camera.h"
 #include"Arcball.h"
 class Scene
 {
@@ -24,11 +23,10 @@ public:
     // timing
     float deltaTime = 0.0f;	// time between current frame and last frame
     float lastFrame = 0.0f;
-    Camera camera=Camera(QVector3D(0.0, 0.0, 1.0));
-    Arcball arcball = Arcball(QVector3D(0.0, 5.0, -10.0), QVector3D(0.0, 0.0, 0.0), QVector3D(0.0, 1.0, 0.0));
+    Arcball arcball = Arcball(QVector3D(3.0, 2.0, 7.0), QVector3D(0.0, 0.5, 0.0), QVector3D(0.0, 1.0, 0.0));
     Scene(int w, int h) : width(w), height(h){}
 
-    void Render(QOpenGLFunctions* f);
+    void Render(QOpenGLFunctions_4_3_Core* f);
     void Add(std::unique_ptr<Object> object) { objects.push_back(std::move(object)); }
     void Add(std::unique_ptr<Light> light) { lights.push_back(std::move(light)); }
 

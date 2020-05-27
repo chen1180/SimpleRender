@@ -5,12 +5,13 @@
 #include<qopengltexture.h>
 #include<qdebug.h>
 #include<qopenglfunctions.h>
+#include<qopenglfunctions_4_3_core.h>
 class Texture
 {
 public:
     Texture() {}
     bool load(const QString& filePath);
-    bool load(const QString& filePath, QOpenGLFunctions* f);
+    bool load(const QString& filePath, QOpenGLFunctions_4_3_Core* f);
     void bind();
     void bind(int);
     void release();

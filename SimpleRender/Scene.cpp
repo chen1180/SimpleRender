@@ -1,5 +1,5 @@
 #include "Scene.h"
-void Scene::Render(QOpenGLFunctions* f) {
+void Scene::Render(QOpenGLFunctions_4_3_Core* f) {
     // issue some native OpenGL commands
     QMatrix4x4 view = arcball.transform();
 
