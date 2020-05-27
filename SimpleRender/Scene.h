@@ -19,11 +19,12 @@ public:
     float epsilon = 0.00001;
 
     QVector2D prev_mouse=QVector2D(-0.f,-0.f);
-
+public:
     // timing
     float deltaTime = 0.0f;	// time between current frame and last frame
     float lastFrame = 0.0f;
-    Arcball arcball = Arcball(QVector3D(3.0, 2.0, 7.0), QVector3D(0.0, 0.5, 0.0), QVector3D(0.0, 1.0, 0.0));
+    int frameCount = 0;
+    Arcball arcball = Arcball(QVector3D(0.0, 0.0, 0.0), QVector3D(0.0, 0.0, -1.0), QVector3D(0.0, 1.0, 0.0));
     Scene(int w, int h) : width(w), height(h){}
 
     void Render(QOpenGLFunctions_4_3_Core* f);

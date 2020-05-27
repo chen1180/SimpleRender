@@ -3,5 +3,4 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\
   GLwindow.cpp
 C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\GLwindow.h(10,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
 C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\MeshTriangle.h(6,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\GLwindow.cpp(155): warning C4700: uninitialized local variable 'workGrouSize' used
   SimpleRender.vcxproj -> C:\Users\dirk_\source\repos\SimpleRender\x64\Debug\SimpleRenderer.exe

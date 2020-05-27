@@ -15,6 +15,8 @@
 #include"MeshTriangle.h"
 #include"Scene.h"
 #include<QtCore/qt>
+#include <QTime>
+#include<qpainter.h>
 class GLwindow : public QOpenGLWindow
 {
 	Q_OBJECT
@@ -62,6 +64,7 @@ protected:
     void mouseMoveEvent(QMouseEvent* event);
     void keyPressEvent(QKeyEvent* event);
     void wheelEvent(QWheelEvent* event);
+
 private:
     QOpenGLContext* m_context;
     QOpenGLFramebufferObject* m_fbo;
@@ -75,7 +78,7 @@ private:
     QOpenGLShaderProgram* rt_program;
     GLuint tex;
     std::vector<float> vertex;
-
+    QTime frameTime;
     Scene scene;
     double alpha=25;
     double beta=-25;

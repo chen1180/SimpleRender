@@ -6,6 +6,8 @@ void GLwindow::initializeGL() {
     f->glEnable(GL_TEXTURE_2D);
     f->glEnable(GL_CULL_FACE);
     f->glCullFace(GL_BACK);
+    //frame
+    frameTime.start();
 
     m_program = new QOpenGLShaderProgram(this);
     m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, "phong.vert");
@@ -124,13 +126,14 @@ void GLwindow::initializeGL() {
 }
 void GLwindow::paintGL() {
     QOpenGLFunctions_4_3_Core* f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_4_3_Core>();
+    QPainter painter(this);
+    painter.beginNativePainting();
     f->glViewport(0, 0, scene.width,scene.height);
     f->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   
     //m_fbo->bind();
     //scene.Render(f);
     //m_fbo->bindDefault();
-  
     QMatrix4x4 view = scene.arcball.transform();
     QMatrix4x4 projection;
     projection.perspective(scene.fov, (float)scene.width / scene.height, 0.1f, 1000.0f);
@@ -147,11 +150,11 @@ void GLwindow::paintGL() {
     rt_program->setUniformValue("ray01", ray01);
     rt_program->setUniformValue("ray10", ray10);
     rt_program->setUniformValue("ray11", ray11);
-
+    rt_program->setUniformValue("time", frameTime.second());
     // Compute appropriate invocation dimension.
     int worksizeX = nextPowerOfTwo(scene.width);
     int worksizeY =nextPowerOfTwo(scene.height);
-    int* workGrouSize;
+    int workGrouSize[3];
     f->glGetProgramiv(rt_program->programId(), GL_COMPUTE_WORK_GROUP_SIZE, workGrouSize);
     int workGroupSizeX, workGroupSizeY;
     workGroupSizeX = workGrouSize[0];
@@ -178,6 +181,18 @@ void GLwindow::paintGL() {
     f->glDrawArrays(GL_TRIANGLES, 0,6);
     quadVAO->release();
     quad_program->release();
+    painter.endNativePainting();
+    //frame
+    scene.frameCount++;
+    if (frameTime.elapsed() >= 1000)
+    {
+        float fps = scene.frameCount / ((double)frameTime.elapsed() / 1000.0);
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setPen(Qt::yellow);
+        painter.setFont(QFont("Helvetica", 12));
+        painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing);
+        painter.drawText(0,0,scene.width,scene.height, Qt::AlignTop|| Qt::AlignLeft, QString::fromStdString("FPS: "+std::to_string(static_cast<int>(fps))));
+    }
     update();
    
 }
@@ -189,6 +204,8 @@ void GLwindow::mousePressEvent(QMouseEvent* event)
     event->accept();
 }
 void GLwindow::mouseMoveEvent(QMouseEvent* event)
+
+
 {
     QVector2D cur_mouse = QVector2D(event->x() * 2.0 / scene.width - 1.0, 1.0 - event->y() * 2.0 / scene.height);
     if (event->buttons() & Qt::LeftButton) {
