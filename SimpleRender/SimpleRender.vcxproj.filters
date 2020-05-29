@@ -29,89 +29,110 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="src\Vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GLwindow.cpp">
+    <ClCompile Include="src\Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="src\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Light.cpp">
+    <ClCompile Include="src\Triangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
+    <ClCompile Include="src\Arcball.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MeshTriangle.cpp">
+    <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
+    <ClCompile Include="src\Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Object.cpp">
+    <ClCompile Include="src\MeshTriangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Arcball.cpp">
+    <ClCompile Include="src\Object.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GLwindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="header\Arcball.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="OBJ_Loader.h">
+    <ClInclude Include="header\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="header\Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h">
+    <ClInclude Include="header\Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
+    <ClInclude Include="header\Scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="MeshTriangle.h">
+    <ClInclude Include="header\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h">
+    <ClInclude Include="header\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Object.h">
+    <ClInclude Include="header\Vector.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Arcball.h">
+    <ClInclude Include="header\MeshTriangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="header\OBJ_Loader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="header\Triangle.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="GLwindow.h">
+    <None Include="shaders\denoise.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="shaders\flat.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="shaders\flat.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="shaders\phong.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="shaders\phong.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="shaders\quad.frag">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="shaders\quad.vert">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="shaders\raytracing.comp">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="shaders\raytracing_bruteforce.comp">
+      <Filter>Resource Files\shaders</Filter>
+    </None>
+    <None Include="shaders\raytracing_volume.comp" />
+    <None Include="shaders\output.frag" />
+    <None Include="shaders\raytracing_progressive.comp" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="header\GLwindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="flat.vert">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="flat.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="phong.vert">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="phong.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="raytracing.comp">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="quad.frag">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
-    <None Include="quad.vert">
-      <Filter>Resource Files\shaders</Filter>
-    </None>
   </ItemGroup>
 </Project>

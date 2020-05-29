@@ -39,6 +39,14 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)bin\intermediates\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
@@ -60,11 +68,11 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <AdditionalIncludeDirectories>C:\Users\dirk_\Documents\libraries;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\dirk_\Documents\libraries;$(projectdir)header\;$(projectdir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <Profile>true</Profile>
     </Link>
@@ -75,45 +83,54 @@
       <DebugInformationFormat />
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
-      <AdditionalIncludeDirectories>C:\Users\dirk_\Documents\libraries;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\dirk_\Documents\libraries;$(projectdir)header\;$(projectdir)src\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
-      <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName).exe</OutputFile>
       <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Arcball.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="GLwindow.cpp" />
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="MeshTriangle.cpp" />
-    <ClCompile Include="Object.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="src\Arcball.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\GLwindow.cpp" />
+    <ClCompile Include="src\Light.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\MeshTriangle.cpp" />
+    <ClCompile Include="src\Object.cpp" />
+    <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\Triangle.cpp" />
+    <ClCompile Include="src\Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Arcball.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="MeshTriangle.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="OBJ_Loader.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="Texture.h" />
-    <QtMoc Include="GLwindow.h" />
+    <ClInclude Include="header\Arcball.h" />
+    <ClInclude Include="header\Camera.h" />
+    <QtMoc Include="header\GLwindow.h" />
+    <ClInclude Include="header\Light.h" />
+    <ClInclude Include="header\MeshTriangle.h" />
+    <ClInclude Include="header\Object.h" />
+    <ClInclude Include="header\OBJ_Loader.h" />
+    <ClInclude Include="header\resource.h" />
+    <ClInclude Include="header\Scene.h" />
+    <ClInclude Include="header\Texture.h" />
+    <ClInclude Include="header\Triangle.hpp" />
+    <ClInclude Include="header\Vector.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="flat.frag" />
-    <None Include="flat.vert" />
-    <None Include="phong.frag" />
-    <None Include="phong.vert" />
-    <None Include="quad.frag" />
-    <None Include="quad.vert" />
-    <None Include="raytracing.comp" />
+    <None Include="shaders\denoise.frag" />
+    <None Include="shaders\flat.frag" />
+    <None Include="shaders\flat.vert" />
+    <None Include="shaders\output.frag" />
+    <None Include="shaders\phong.frag" />
+    <None Include="shaders\phong.vert" />
+    <None Include="shaders\quad.frag" />
+    <None Include="shaders\quad.vert" />
+    <None Include="shaders\raytracing.comp" />
+    <None Include="shaders\raytracing_bruteforce.comp" />
+    <None Include="shaders\raytracing_progressive.comp" />
+    <None Include="shaders\raytracing_volume.comp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
