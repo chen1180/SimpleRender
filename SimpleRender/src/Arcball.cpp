@@ -110,13 +110,9 @@ void Arcball::update_camera()
 {
 	QMatrix4x4 rotation_mat;
 	rotation_mat.rotate(rotation);
-	QMatrix4x4 tmp_camera = translation * rotation_mat * center_translation;
-	if (tmp_camera != camera) {
-		camera = tmp_camera;
-		inv_camera = camera.inverted();
-	}
+	camera = translation * rotation_mat * center_translation;
+	inv_camera = camera.inverted();
 }
-
 QQuaternion screen_to_arcball(const QVector2D& p)
 {
 	const float dist = p.lengthSquared();

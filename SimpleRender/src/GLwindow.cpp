@@ -87,6 +87,7 @@ void GLwindow::initializeGL() {
 
     m_fbo = new QOpenGLFramebufferObject(scene.width, scene.width, QOpenGLFramebufferObject::NoAttachment);
     m_fbo->bind();
+    //process of define an image rather than texture
     f->glGenTextures(1, &tex);
     f->glBindTexture(GL_TEXTURE_2D, tex);
     f->glTexStorage2D(GL_TEXTURE_2D, 8, GL_RGBA32F, scene.width, scene.height);
@@ -98,9 +99,7 @@ void GLwindow::initializeGL() {
     accum_fbo->bind();
     f->glGenTextures(1, &accum_tex);
     f->glBindTexture(GL_TEXTURE_2D, accum_tex);
-    f->glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, GLsizei(scene.width), GLsizei(scene.height), 0, GL_RGBA, GL_FLOAT, 0);
-    f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    f->glTexStorage2D(GL_TEXTURE_2D, 8, GL_RGBA32F, scene.width, scene.height);
     f->glBindTexture(GL_TEXTURE_2D, 0);
     f->glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, accum_tex, 0);
 
@@ -111,7 +110,6 @@ void GLwindow::initializeGL() {
     f->glTexStorage2D(GL_TEXTURE_2D, 8, GL_RGBA32F, scene.width, scene.height);
     f->glBindTexture(GL_TEXTURE_2D, 0);
     //quad data
-
     quad_program = new QOpenGLShaderProgram(this);
     quad_program->addShaderFromSourceFile(QOpenGLShader::Vertex, "shaders/quad.vert");
     quad_program->addShaderFromSourceFile(QOpenGLShader::Fragment, "shaders/quad.frag");
@@ -156,6 +154,23 @@ void GLwindow::initializeGL() {
     quadVBO->release();
     output_program->release();
 
+    //create sphere buffer;
+    sceneBuffer= new QOpenGLBuffer();
+    sceneBuffer->create();
+    f->glBindBuffer(GL_SHADER_STORAGE_BUFFER, sceneBuffer->bufferId());
+    f->glBufferData(GL_SHADER_STORAGE_BUFFER, sizeof(sceneList)+ sizeof(scene_size),NULL, GL_DYNAMIC_COPY);
+    f->glBufferSubData(GL_SHADER_STORAGE_BUFFER, 0, sizeof(unsigned int),&scene_size);
+    f->glBufferSubData(GL_SHADER_STORAGE_BUFFER, sizeof(unsigned int), sizeof(sceneList), &sceneList);
+    //f->glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, sceneBuffer->bufferId());
+    f->glBindBuffer(GL_SHADER_STORAGE_BUFFER,0);
+    //f->glBindBuffer(GL_SHADER_STORAGE_BUFFER, sceneBuffer->bufferId());
+    //Sphere* ptr = (Sphere*)f->glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_READ_ONLY);
+    //memcpy(ptr, &sceneList, sizeof(sceneList));
+    //f->glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+    //GLvoid* p = f->glMapBuffer(GL_SHADER_STORAGE_BUFFER, GL_READ_ONLY);
+    //memcpy(p, &sceneList, sizeof(sceneList));
+    //f->glUnmapBuffer(GL_SHADER_STORAGE_BUFFER);
+
 }
 void GLwindow::paintGL() {
     QOpenGLFunctions_4_3_Core* f = QOpenGLContext::currentContext()->versionFunctions<QOpenGLFunctions_4_3_Core>();
@@ -175,9 +190,6 @@ void GLwindow::paintGL() {
     ray10 = (invViewProj * QVector4D(1, -1, 0, 1) ).toVector3DAffine() - scene.arcball.eye();
     ray11 = (invViewProj * QVector4D(1, 1, 0, 1) ).toVector3DAffine() - scene.arcball.eye();
 
-
-    
-    painter.endNativePainting();
     //frame
     if (scene.arcball.isMoving == false) {
         m_fbo->bind();
@@ -209,6 +221,8 @@ void GLwindow::paintGL() {
         //text->bind();
         //rt_program->setUniformValue(rt_program->uniformLocation("text"), text->id);
         //std::cout << text->id<<' '<< rt_program->uniformLocation("text");
+        f->glBindBuffer(GL_SHADER_STORAGE_BUFFER, sceneBuffer->bufferId());
+        f->glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, sceneBuffer->bufferId());
         f->glBindImageTexture(0, tex, 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
         f->glBindImageTexture(1, accum_tex, 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
         f->glDispatchCompute(worksizeX / workGroupSizeX, worksizeY / workGroupSizeY, 1);
@@ -288,6 +302,8 @@ void GLwindow::paintGL() {
         samples = 1.0;
     }
     scene.frameCount++;
+
+    painter.endNativePainting();
     if (frameTime.elapsed() >= 1000)
     {
         float fps = scene.frameCount / ((double)frameTime.elapsed() / 1000.0);
