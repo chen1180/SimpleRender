@@ -30,7 +30,7 @@
 <QMake_QMAKE_VERSION_>3.1</QMake_QMAKE_VERSION_>
 <QMake_QT_VERSION_>5.14.2</QMake_QT_VERSION_>
 <Qt_INCLUDEPATH_
-      >$(Qt_INCLUDEPATH_);C:\Users\dirk_\source\repos\SimpleRender\bin\intermediates\x64\Debug\moc\header</Qt_INCLUDEPATH_>
+      >$(Qt_INCLUDEPATH_);C:\Users\dirk_\source\repos\SimpleRender\bin\intermediates\x64\Debug\moc\src</Qt_INCLUDEPATH_>
     <QtBkup_QtInstall
       >msvc</QtBkup_QtInstall>
     <QtBkup_QtModules

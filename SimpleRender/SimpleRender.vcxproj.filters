@@ -32,9 +32,6 @@
     <ClCompile Include="src\Vector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -62,39 +59,57 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\quad.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rasteriser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="header\Arcball.h">
+    <ClInclude Include="src\Arcball.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="header\Camera.h">
+    <ClInclude Include="src\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="header\Light.h">
+    <ClInclude Include="src\global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="header\Object.h">
+    <ClInclude Include="src\Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="header\Scene.h">
+    <ClInclude Include="src\MeshTriangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="header\resource.h">
+    <ClInclude Include="src\OBJ_Loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="header\Texture.h">
+    <ClInclude Include="src\Object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="header\Vector.hpp">
+    <ClInclude Include="src\quad.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="header\MeshTriangle.h">
+    <ClInclude Include="src\Rasteriser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="header\OBJ_Loader.h">
+    <ClInclude Include="src\renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="header\Triangle.hpp">
+    <ClInclude Include="src\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Scene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Triangle.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vector.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -131,7 +146,7 @@
     <None Include="shaders\raytracing_progressive.comp" />
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="header\GLwindow.h">
+    <QtMoc Include="src\GLwindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

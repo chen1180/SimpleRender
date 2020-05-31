@@ -1,7 +1,6 @@
 #include "MeshTriangle.h"
 #include"OBJ_Loader.h"
 
-
 void MeshTriangle::load(const QString& model_path) {
     objl::Loader Loader;
 

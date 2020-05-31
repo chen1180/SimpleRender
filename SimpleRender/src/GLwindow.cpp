@@ -65,7 +65,9 @@ void GLwindow::initializeGL() {
     light2->diffuse = QVector3D(0.8, 0.8, 0.8);
     light2->specular = QVector3D(1.0, 1.0, 1.0);
     scene.Add(std::move(light2));
-
+    
+    render = new Rasteriser(&scene);
+    render->init();
     //Ray tracing part
     rt_program = new QOpenGLShaderProgram(this);
     if (RAY_TRACING)
@@ -121,39 +123,7 @@ void GLwindow::initializeGL() {
     output_program->addShaderFromSourceFile(QOpenGLShader::Fragment, "shaders/output.frag");
     output_program->link();
 
-    vertex = std::vector<float>{ 
-         -1.0f,  1.0f,
-        -1.0f, -1.0f,
-         1.0f, -1.0f,
-
-        -1.0f,  1.0f,
-         1.0f, -1.0f,
-         1.0f,  1.0f
-    };
-    quadVBO=new QOpenGLBuffer();
-    quadVAO=new QOpenGLVertexArrayObject();
-
-    quadVAO->create();
-    quadVAO->bind();
-    //create buffer (Do not release until VAO is created)
-    quadVBO->create();
-    quadVBO->bind();
-    quadVBO->setUsagePattern(QOpenGLBuffer::StaticDraw);
-    quadVBO->allocate(vertex.data(),vertex.size()* sizeof(float));
-    // Create Vertex Array Object
-    quad_program->enableAttributeArray(0);
-    quad_program->setAttributeBuffer(0, GL_FLOAT, 0, 2, sizeof(float)*2);
-    quadVAO->release();
-    quadVBO->release();
-    quad_program->release();
-    //output frame
-    output_program->bind();
-    quadVAO->bind();
-    quadVBO->bind();
-    quadVAO->release();
-    quadVBO->release();
-    output_program->release();
-
+    quad = make_unique<Quad>();
     //create sphere buffer;
     sceneBuffer= new QOpenGLBuffer();
     sceneBuffer->create();
@@ -238,10 +208,7 @@ void GLwindow::paintGL() {
         quad_program->bind();
         f->glActiveTexture(GL_TEXTURE0);
         f->glBindTexture(GL_TEXTURE_2D, tex);
-        quadVAO->bind();
-        f->glDrawArrays(GL_TRIANGLES, 0, 6);
-        quadVAO->release();
-        quad_program->release();
+        quad->Draw(quad_program);
 
         accum_fbo->bindDefault();
         f->glClear(GL_COLOR_BUFFER_BIT);
@@ -250,10 +217,7 @@ void GLwindow::paintGL() {
         output_program->setUniformValue("invSamples", 1.0f / samples);
         f->glActiveTexture(GL_TEXTURE0);
         f->glBindTexture(GL_TEXTURE_2D, accum_tex);
-        quadVAO->bind();
-        f->glDrawArrays(GL_TRIANGLES, 0, 6);
-        quadVAO->release();
-        output_program->release();
+        quad->Draw(output_program);
         ++samples;
     }
     else {
@@ -283,10 +247,7 @@ void GLwindow::paintGL() {
         quad_program->bind();
         f->glActiveTexture(GL_TEXTURE0);
         f->glBindTexture(GL_TEXTURE_2D, progressive_tex);
-        quadVAO->bind();
-        f->glDrawArrays(GL_TRIANGLES, 0, 6);
-        quadVAO->release();
-        quad_program->release();
+        quad->Draw(quad_program);
         accum_fbo->bindDefault();
         f->glClear(GL_COLOR_BUFFER_BIT);
         //draw screen texture
@@ -294,11 +255,7 @@ void GLwindow::paintGL() {
         output_program->setUniformValue("invSamples", 1.0f / samples);
         f->glActiveTexture(GL_TEXTURE0);
         f->glBindTexture(GL_TEXTURE_2D, accum_tex);
-        quadVAO->bind();
-        f->glDrawArrays(GL_TRIANGLES, 0, 6);
-        quadVAO->release();
-        output_program->release();
-
+        quad->Draw(output_program);
         samples = 1.0;
     }
     scene.frameCount++;
