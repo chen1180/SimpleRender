@@ -1,15 +1,13 @@
 #include "Rasteriser.h"
 Rasteriser::Rasteriser(Scene* scene):Renderer(scene) {
-    initializeOpenGLFunctions();
 }
-void Rasteriser::init() {
+void Rasteriser::init(QOpenGLFunctions_4_3_Core* f) {
 	if (initialized)
 		return;
 	if (scene == nullptr) {
 		std::cout<<"Error: No Scene Found!\n";
 		return;
 	}
-	quad = make_unique<Quad>();
 	initialized = true;
 }
 void Rasteriser::finish() {

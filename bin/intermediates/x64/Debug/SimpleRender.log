@@ -1,4 +1,0 @@
-﻿  GLwindow.cpp
-C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\src\MeshTriangle.h(6,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\src\renderer.h(5,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-  SimpleRender.vcxproj -> C:\Users\dirk_\source\repos\SimpleRender\bin\x64\Debug\SimpleRenderer.exe

@@ -1,0 +1,5 @@
+﻿  GLwindow.cpp
+C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\src\MeshTriangle.h(6,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+C:\Users\dirk_\source\repos\SimpleRender\SimpleRender\src\GLwindow.cpp(184,1): error C2280: 'QWidget::QWidget(const QWidget &)': attempting to reference a deleted function
+C:\Qt\5.14.2\msvc2017_64\include\QtWidgets\qwidget.h(744): message : see declaration of 'QWidget::QWidget'
+C:\Qt\5.14.2\msvc2017_64\include\QtWidgets\qwidget.h(744,5): message : 'QWidget::QWidget(const QWidget &)': function was explicitly deleted
